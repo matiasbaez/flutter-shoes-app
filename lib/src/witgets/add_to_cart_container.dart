@@ -31,7 +31,9 @@ class AddToCartContainer extends StatelessWidget {
 
             const Spacer(),
 
-            const AddToCartButton(text: 'Add to cart')
+            const AddToCartButton(text: 'Add to cart'),
+
+            const SizedBox( width: 15 )
           ],
         ),
       ),
