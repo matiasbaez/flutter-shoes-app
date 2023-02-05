@@ -4,7 +4,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:provider/provider.dart';
 
 import 'package:shoes/src/helpers/helpers.dart';
-import 'package:shoes/src/witgets/witgets.dart';
+import 'package:shoes/src/widgets/widgets.dart';
 import 'package:shoes/src/models/models.dart';
 
 class ShoeDetailScreen extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:shoes/src/witgets/witgets.dart';
+import 'package:shoes/src/widgets/widgets.dart';
 
 class AddToCartContainer extends StatelessWidget {
 

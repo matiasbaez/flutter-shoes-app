@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:shoes/src/helpers/helpers.dart';
-import 'package:shoes/src/witgets/witgets.dart';
+import 'package:shoes/src/widgets/widgets.dart';
 
 class ShoesScreen extends StatelessWidget {
   const ShoesScreen({ Key? key }) : super(key: key);
