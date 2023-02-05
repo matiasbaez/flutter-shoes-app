@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
+import 'package:shoes/src/models/models.dart';
 import 'package:shoes/src/screens/screens.dart';
 
 void main() {
-  runApp(const MyApp());
+  return runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider( create: (_) => ShoeModel() )
+      ],
+      child: const MyApp()
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -18,7 +28,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: const ShoeDetailScreen(),
+      home: const ShoesScreen(),
     );
   }
 }

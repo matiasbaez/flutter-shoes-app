@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+
+import 'package:animate_do/animate_do.dart';
+import 'package:provider/provider.dart';
+
 import 'package:shoes/src/witgets/witgets.dart';
+import 'package:shoes/src/models/models.dart';
 
 class ShoeDetailScreen extends StatelessWidget {
   const ShoeDetailScreen({ Key? key }) : super(key: key);
@@ -12,21 +17,26 @@ class ShoeDetailScreen extends StatelessWidget {
 
           Stack(
             children: [
-              const ShoePreview(
-                fullScreen: true
+
+              const Hero(
+                tag: 'shoe-preview',
+                child: ShoePreview(
+                  fullScreen: true
+                ),
               ),
 
               Positioned(
                 top: 80,
                 left: 10,
                 child: FloatingActionButton(
-                  onPressed: () {},
+                  onPressed: () => Navigator.pop(context),
                   elevation: 0,
                   highlightElevation: 0,
                   backgroundColor: Colors.transparent,
                   child: const Icon( Icons.chevron_left, size: 60, color: Colors.white ),
                 )
               )
+
             ],
           ),
 
@@ -67,15 +77,19 @@ class _AmountContainer extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only( top: 20, bottom: 20 ),
         child: Row(
-          children: const [
-            Text( '\$180.0', style: TextStyle( fontSize: 28, fontWeight: FontWeight.bold ) ),
+          children: [
+            const Text( '\$180.0', style: TextStyle( fontSize: 28, fontWeight: FontWeight.bold ) ),
 
-            Spacer(),
+            const Spacer(),
 
-            AddToCartButton(
-              text: 'Add to cart',
-              width: 120,
-              height: 40,
+            Bounce(
+              from: 8,
+              delay: const Duration( milliseconds: 500 ),
+              child: const AddToCartButton(
+                text: 'Add to cart',
+                width: 120,
+                height: 40,
+              ),
             )
           ],
         ),
@@ -95,10 +109,10 @@ class _ShowColors extends StatelessWidget {
           Expanded(
             child: Stack(
               children: const [
-                Positioned( left: 90, child: _ColorButton( color: Color(0xffC6D642) ) ),
-                Positioned( left: 60, child: _ColorButton( color: Color(0xffFFAD29) ) ),
-                Positioned( left: 30, child: _ColorButton( color: Color(0xff2099F1) ) ),
-                _ColorButton( color: Color(0xff364D56) ),
+                Positioned( left: 90, child: _ColorButton( color: Color(0xffC6D642), image: 'assets/imgs/verde.png', index: 4 ) ),
+                Positioned( left: 60, child: _ColorButton( color: Color(0xffFFAD29), image: 'assets/imgs/amarillo.png', index: 3 ) ),
+                Positioned( left: 30, child: _ColorButton( color: Color(0xff2099F1), image: 'assets/imgs/azul.png', index: 2 ) ),
+                _ColorButton( color: Color(0xff364D56), image: 'assets/imgs/negro.png', index: 1 ),
               ],
             ),
           ),  
@@ -117,21 +131,34 @@ class _ShowColors extends StatelessWidget {
 
 class _ColorButton extends StatelessWidget {
 
+  final String image;
   final Color color;
+  final int index;
 
   const _ColorButton({
     Key? key,
-    required this.color,
+    required this.index,
+    required this.color, required this.image,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 45,
-      height: 45,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle
+
+    return FadeInLeft(
+      delay: Duration( milliseconds: index * 100 ),
+      duration: const Duration( milliseconds: 300 ),
+      child: GestureDetector(
+        onTap: () {
+          final shoeModel = Provider.of<ShoeModel>(context, listen: false).assetImage = image;
+        },
+        child: Container(
+          width: 45,
+          height: 45,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle
+          ),
+        ),
       ),
     );
   }

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:shoes/src/screens/screens.dart';
+import 'package:shoes/src/models/models.dart';
 
 class ShoePreview extends StatelessWidget {
 
@@ -11,34 +15,39 @@ class ShoePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: (fullScreen) ? 5 : 20,
-        vertical: (fullScreen) ? 5 : 5
-      ),
-      child: Container(
-        height: (fullScreen) ? 400 : 430,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: const Color(0xffFFCF53),
-          borderRadius: (!fullScreen)
-            ? BorderRadius.circular(50)
-            : const BorderRadius.only(
-                topRight: Radius.circular( 20 ),
-                bottomRight: Radius.circular( 50 ),
-                bottomLeft: Radius.circular( 50 ),
-                topLeft: Radius.circular( 20 ),
-              )
+    return GestureDetector(
+      onTap: () {
+        if (!fullScreen) Navigator.push(context, MaterialPageRoute(builder: (context) => const ShoeDetailScreen()));
+      },
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: (fullScreen) ? 5 : 20,
+          vertical: (fullScreen) ? 5 : 5
         ),
-        child: Column(
-          children: [
-            // Shoe with shadow
-            _ShowWithShadow(),
-
-            // Sizes
-            if (!fullScreen) _ShoeSizes()
-          ],
-        )
+        child: Container(
+          height: (fullScreen) ? 400 : 430,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: const Color(0xffFFCF53),
+            borderRadius: (!fullScreen)
+              ? BorderRadius.circular(50)
+              : const BorderRadius.only(
+                  topRight: Radius.circular( 20 ),
+                  bottomRight: Radius.circular( 50 ),
+                  bottomLeft: Radius.circular( 50 ),
+                  topLeft: Radius.circular( 20 ),
+                )
+          ),
+          child: Column(
+            children: [
+              // Shoe with shadow
+              _ShowWithShadow(),
+    
+              // Sizes
+              if (!fullScreen) _ShoeSizes()
+            ],
+          )
+        ),
       ),
     );
   }
@@ -47,18 +56,21 @@ class ShoePreview extends StatelessWidget {
 class _ShowWithShadow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    final shoeModel = Provider.of<ShoeModel>(context);
+
     return Padding(
       padding: const EdgeInsets.all(50),
       child: Stack(
-        children: const <Widget>[
+        children: <Widget>[
 
-          Positioned(
+          const Positioned(
             right: 0,
             bottom: 20,
             child: _Shadow()
           ),
 
-          Image(image: AssetImage('assets/imgs/azul.png'))
+          Image(image: AssetImage(shoeModel.assetImage))
         ],
       ),
     );
@@ -127,20 +139,29 @@ class _ShowSizeBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 45,
-      height: 45,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: (size == 9) ? const Color(0xffF99606) : Colors.white,
-        borderRadius: BorderRadius.circular( 10 ),
-        boxShadow: [
-          if (size == 9) const BoxShadow(color: Color(0xffF1A23A), blurRadius: 10, offset: Offset(0, 5) )
-        ] 
-      ),
-      child: Text(
-        size.toString().replaceAll('.0', ''),
-        style: TextStyle( color: (size == 9) ? Colors.white : const Color(0xffF1A23A), fontSize: 16, fontWeight: FontWeight.bold )
+
+    final shoeModel = Provider.of<ShoeModel>(context);
+
+    return GestureDetector(
+      onTap: () {
+        final shoeModel = Provider.of<ShoeModel>(context, listen: false);
+        shoeModel.size = size;
+      },
+      child: Container(
+        width: 45,
+        height: 45,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: (size == shoeModel.size) ? const Color(0xffF99606) : Colors.white,
+          borderRadius: BorderRadius.circular( 10 ),
+          boxShadow: [
+            if (size == shoeModel.size) const BoxShadow(color: Color(0xffF1A23A), blurRadius: 10, offset: Offset(0, 5) )
+          ] 
+        ),
+        child: Text(
+          size.toString().replaceAll('.0', ''),
+          style: TextStyle( color: (size == shoeModel.size) ? Colors.white : const Color(0xffF1A23A), fontSize: 16, fontWeight: FontWeight.bold )
+        ),
       ),
     );
   }
